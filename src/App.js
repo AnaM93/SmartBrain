@@ -49,27 +49,29 @@ const requestOptions = {
   return requestOptions;
 };
  
-/*fetch("https://api.clarifai.com/v2/models/" + "face-detection" + "/outputs", returnClarifaiRequest(this.state.input))
-    .then(response => response.json())*/
+
+
+    const initialState = {
+        input: '',
+        imageUrl: '',
+        box: {},
+        route: 'signIn',
+        isSignedIn: false,
+        user:{
+          id: '',
+          name: '',
+          email:'',
+          entries: 0,
+          joined: new Date()
+        
+    }}
 
 class App extends Component {
   constructor(){
     super();
-    this.state = {
-      input: '',
-      imageUrl: '',
-      box: {},
-      route: 'signIn',
-      isSignedIn: false,
-      user:{
-        id: '',
-        name: '',
-        email:'',
-        entries: 0,
-        joined: new Date()
-      }
+    this.state = initialState
     }
-  }
+  
 
   loadUser = (data) => {
     this.setState({user: {
@@ -118,20 +120,21 @@ class App extends Component {
               id: this.state.user.id
             })
           })
-      .then(response => response.json())
-      .then (count => {
-        this.setState({user:{
-          ...this.state.user,
-        entries: count}})
+             .then(response => response.json())
+            .then (count => {
+               this.setState({user:{
+              ...this.state.user,
+              entries: count}})
       })
-        this.displayFaceBox(this.calculateFaceLocation(response))}
+      .catch(console.log)
+      this.displayFaceBox(this.calculateFaceLocation(response))}
         })
       .catch(err => console.log(err));
   };
 
 onRouteChange = (route) => {
   if (route === 'signout'){
-  this.setState({isSignedIn:false})}
+  this.setState(initialState)}
   else if (route === 'home'){
   this.setState({isSignedIn:true})
   }
